@@ -496,35 +496,6 @@
             font-size: 0.9rem;
         }
         
-        /* Audio Player */
-        .audio-player {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: var(--dark-color);
-            color: var(--white);
-            border-radius: 50px;
-            padding: 0.8rem 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            box-shadow: var(--shadow);
-            z-index: 100;
-        }
-        
-        .audio-toggle {
-            background: none;
-            border: none;
-            color: var(--white);
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .audio-toggle:hover {
-            color: var(--primary-color);
-        }
-        
         /* Responsive Design */
         @media screen and (max-width: 1024px) {
             .about-content {
@@ -628,13 +599,7 @@
                 grid-template-columns: 1fr;
             }
             
-            .audio-player {
-                bottom: 10px;
-                right: 10px;
-                padding: 0.6rem 1rem;
-                font-size: 0.9rem;
-            }
-        }
+           
     </style>
 </head>
 <body>
@@ -952,21 +917,7 @@
                 &copy; 2025 Agrata Amatya. All rights reserved.
             </div>
         </div>
-    </footer>
-    
-    <!-- Audio Player -->
-    <div class="audio-player">
-        <button class="audio-toggle" id="audio-toggle" aria-label="Toggle background music">
-            <i class="fas fa-music"></i>
-        </button>
-        <span>Background Music</span>
-        <audio id="background-audio" loop>
-            <!-- You can add your audio file here -->
-            <source src="https://assets.codepen.io/3364143/sound.mp3" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio>
-    </div>
-    
+    </footer>    
     <script>
         // Mobile Menu Toggle
         const menuButton = document.getElementById('menu-button');
