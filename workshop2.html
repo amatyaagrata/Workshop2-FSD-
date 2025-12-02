@@ -6,7 +6,7 @@
     <title>Agrata Amatya | Frontend Developer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* CSS Reset and Variables */
+        /* CSS  */
         * {
             margin: 0;
             padding: 0;
@@ -24,7 +24,7 @@
             --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             --transition: all 0.3s ease;
             --error-color: #dc3545;
-            --sucess-color: #28a745;
+            --success-color: #28a745;
         }
         
         body {
@@ -163,13 +163,7 @@
             height: 30px;
             position: relative;
         }
-        .menu-toggle i{
-            position: absolute;
-            top:50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            transition: var(--transition);
-        }
+        
         .menu-toggle i {
             position: absolute;
             top: 50%;
@@ -177,6 +171,7 @@
             transform: translate(-50%, -50%);
             transition: var(--transition);
         }
+        
         .menu-toggle .fa-bars {
             opacity: 1;
         }
@@ -192,7 +187,6 @@
         .menu-toggle.active .fa-times {
             opacity: 1;
         }
-            
         
         .hero-content {
             flex: 1;
@@ -449,6 +443,24 @@
             box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2);
         }
         
+        /* Form validation styles */
+        .form-control.error {
+            border-color: var(--error-color);
+            box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.2);
+        }
+        
+        .form-control.success {
+            border-color: var(--success-color);
+            box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);
+        }
+        
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        
         textarea.form-control {
             min-height: 150px;
             resize: vertical;
@@ -459,6 +471,15 @@
             padding: 0.8rem;
             border-radius: 4px;
             text-align: center;
+        }
+        
+        /* Submit button states */
+        .btn.error {
+            background-color: var(--error-color);
+        }
+        
+        .btn.success {
+            background-color: var(--success-color);
         }
         
         /* Social Media Section */
@@ -532,16 +553,6 @@
         }
         
         /* Responsive Design */
-        @media screen and (max-width: 1024px) {
-            .about-content {
-                flex-direction: column;
-            }
-            
-            .contact-container {
-                flex-direction: column;
-            }
-        }
-        
         @media screen and (max-width: 768px) {
             h1 {
                 font-size: 2.5rem;
@@ -573,11 +584,14 @@
                 opacity: 0;
                 transition: var(--transition);
                 z-index: 99;
+                display: flex;
+                visibility: hidden;
             }
             
-            .nav-links.open {
+            .nav-links.active {
                 transform: translateY(0);
                 opacity: 1;
+                visibility: visible;
             }
             
             .menu-toggle {
@@ -633,8 +647,8 @@
             #projects-grid {
                 grid-template-columns: 1fr;
             }
-            
-           
+
+        }
     </style>
 </head>
 <body>
@@ -661,7 +675,8 @@
                 <li><a href="#contact">Contact</a></li>
             </ul>
             <button class="menu-toggle" aria-expanded="false" aria-label="Toggle navigation" id="menu-button">
-                ☰
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-times"></i>
             </button>
         </nav>
         
@@ -897,29 +912,33 @@
                         </div>
                         <div>
                             <h3>Availability</h3>
-                            <p>Monday - Friday: 9am - 5pm</p>
+                            <p>Sunday - Friday: 9am - 5pm</p>
                         </div>
                     </div>
                 </div>
                 <div class="contact-form">
                     <form id="contact-form">
                         <div class="form-group">
-                            <label for="name">Name</label>
+                            <label for="name">Name *</label>
                             <input type="text" id="name" class="form-control" required>
+                            <div class="error-message" id="name-error">Please enter your name</div>
                         </div>
                         <div class="form-group">
-                            <label for="email">Email</label>
+                            <label for="email">Email *</label>
                             <input type="email" id="email" class="form-control" required>
+                            <div class="error-message" id="email-error">Please enter a valid email address</div>
                         </div>
                         <div class="form-group">
-                            <label for="subject">Subject</label>
+                            <label for="subject">Subject *</label>
                             <input type="text" id="subject" class="form-control" required>
+                            <div class="error-message" id="subject-error">Please enter a subject</div>
                         </div>
                         <div class="form-group">
-                            <label for="message">Message</label>
+                            <label for="message">Message *</label>
                             <textarea id="message" class="form-control" required></textarea>
+                            <div class="error-message" id="message-error">Please enter your message</div>
                         </div>
-                        <button type="submit" class="btn">Send Message</button>
+                        <button type="submit" class="btn" id="submit-btn">Send Message</button>
                     </form>
                     <div id="form-message"></div>
                 </div>
@@ -952,19 +971,30 @@
                 &copy; 2025 Agrata Amatya. All rights reserved.
             </div>
         </div>
+
+    </footer>
+    
+
     </footer>    
+
     <script>
-        // Mobile Menu Toggle
+        // Mobile Menu Toggle - SIMPLIFIED FIX
         const menuButton = document.getElementById('menu-button');
         const navLinks = document.querySelector('.nav-links');
         
         function toggleMenu() {
+            // Toggle active class on nav-links
             navLinks.classList.toggle('active');
+            
+            // Toggle active class on menu button
             menuButton.classList.toggle('active');
+            
+            // Update aria-expanded attribute
             const isExpanded = navLinks.classList.contains('active');
             menuButton.setAttribute('aria-expanded', isExpanded);
         }
-        // click event added to menu button
+        
+        // Add click event to menu button
         menuButton.addEventListener('click', toggleMenu);
         
         // Close menu when clicking on a link (for mobile)
@@ -989,35 +1019,142 @@
         
         window.addEventListener('scroll', updateProgressBar);
         
-        // Form Submission Handling
+        // Form Validation and Submission Handling
         const contactForm = document.getElementById('contact-form');
         const messageDiv = document.getElementById('form-message');
+        const submitBtn = document.getElementById('submit-btn');
         
+        // Get form elements
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const subjectInput = document.getElementById('subject');
+        const messageInput = document.getElementById('message');
+        
+        // Get error message elements
+        const nameError = document.getElementById('name-error');
+        const emailError = document.getElementById('email-error');
+        const subjectError = document.getElementById('subject-error');
+        const messageError = document.getElementById('message-error');
+        
+        // Email validation function
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+        
+        // Reset all field styles
+        function resetFieldStyles() {
+            const fields = [nameInput, emailInput, subjectInput, messageInput];
+            const errors = [nameError, emailError, subjectError, messageError];
+            
+            fields.forEach(field => {
+                field.classList.remove('error', 'success');
+            });
+            
+            errors.forEach(error => {
+                error.style.display = 'none';
+            });
+            
+            submitBtn.classList.remove('error', 'success');
+        }
+        
+        // Show error for a specific field
+        function showError(field, errorElement, message) {
+            field.classList.remove('success');
+            field.classList.add('error');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+        
+        // Show success for a specific field
+        function showSuccess(field, errorElement) {
+            field.classList.remove('error');
+            field.classList.add('success');
+            errorElement.style.display = 'none';
+        }
+        
+        // Validate individual field
+        function validateField(field, errorElement, isEmail = false) {
+            const value = field.value.trim();
+            
+            if (value === '') {
+                showError(field, errorElement, 'This field is required');
+                return false;
+            }
+            
+            if (isEmail && !validateEmail(value)) {
+                showError(field, errorElement, 'Please enter a valid email address');
+                return false;
+            }
+            
+            showSuccess(field, errorElement);
+            return true;
+        }
+        
+        // Validate entire form
+        function validateForm() {
+            let isValid = true;
+            
+            // Validate each field
+            if (!validateField(nameInput, nameError)) isValid = false;
+            if (!validateField(emailInput, emailError, true)) isValid = false;
+            if (!validateField(subjectInput, subjectError)) isValid = false;
+            if (!validateField(messageInput, messageError)) isValid = false;
+            
+            // Update submit button style
+            if (!isValid) {
+                submitBtn.classList.remove('success');
+                submitBtn.classList.add('error');
+                submitBtn.textContent = 'Please fix errors above';
+            } else {
+                submitBtn.classList.remove('error');
+                submitBtn.classList.add('success');
+                submitBtn.textContent = 'Sending...';
+            }
+            
+            return isValid;
+        }
+        
+        // Real-time validation as user types
+        nameInput.addEventListener('input', () => validateField(nameInput, nameError));
+        emailInput.addEventListener('input', () => validateField(emailInput, emailError, true));
+        subjectInput.addEventListener('input', () => validateField(subjectInput, subjectError));
+        messageInput.addEventListener('input', () => validateField(messageInput, messageError));
+        
+        // Form submission
         if (contactForm && messageDiv) {
             contactForm.addEventListener('submit', function(event) {
                 event.preventDefault();
                 
-                const nameInput = document.getElementById('name').value;
-                const emailInput = document.getElementById('email').value;
-                const subjectInput = document.getElementById('subject').value;
-                const messageInput = document.getElementById('message').value;
+                // Reset all styles first
+                resetFieldStyles();
                 
-                if (nameInput === '' || emailInput === '' || subjectInput === '' || messageInput === '') {
-                    messageDiv.textContent = 'Please fill out all required fields.';
-                    messageDiv.style.color = 'red';
-                } else {
-                    messageDiv.textContent = 'Thank you for your message! I will be in touch shortly.';
-                    messageDiv.style.color = 'green';
-                    contactForm.reset();
-                    
-                    setTimeout(() => {
-                        messageDiv.textContent = '';
-                    }, 5000);
+                // Validate form
+                if (!validateForm()) {
+                    messageDiv.textContent = 'Please correct the errors above.';
+                    messageDiv.style.color = 'var(--error-color)';
+                    messageDiv.style.backgroundColor = 'rgba(220, 53, 69, 0.1)';
+                    return;
                 }
+                
+                // Form is valid - simulate sending
+                messageDiv.textContent = 'Thank you for your message! I will be in touch shortly.';
+                messageDiv.style.color = 'var(--success-color)';
+                messageDiv.style.backgroundColor = 'rgba(40, 167, 69, 0.1)';
+                
+                // Reset button text
+                submitBtn.textContent = 'Message Sent!';
+                
+                // Reset form after 2 seconds
+                setTimeout(() => {
+                    contactForm.reset();
+                    resetFieldStyles();
+                    submitBtn.textContent = 'Send Message';
+                    submitBtn.classList.remove('success');
+                    messageDiv.textContent = '';
+                }, 5000);
             });
         }
-        
-      
         
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
