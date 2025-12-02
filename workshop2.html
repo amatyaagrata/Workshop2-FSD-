@@ -23,6 +23,8 @@
             --white: #fff;
             --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             --transition: all 0.3s ease;
+            --error-color: #dc3545;
+            --sucess-color: #28a745;
         }
         
         body {
@@ -157,7 +159,40 @@
             color: var(--white);
             font-size: 1.5rem;
             cursor: pointer;
+            width: 30px;
+            height: 30px;
+            position: relative;
         }
+        .menu-toggle i{
+            position: absolute;
+            top:50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: var(--transition);
+        }
+        .menu-toggle i {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: var(--transition);
+        }
+        .menu-toggle .fa-bars {
+            opacity: 1;
+        }
+        
+        .menu-toggle .fa-times {
+            opacity: 0;
+        }
+        
+        .menu-toggle.active .fa-bars {
+            opacity: 0;
+        }
+        
+        .menu-toggle.active .fa-times {
+            opacity: 1;
+        }
+            
         
         .hero-content {
             flex: 1;
@@ -924,18 +959,18 @@
         const navLinks = document.querySelector('.nav-links');
         
         function toggleMenu() {
-            navLinks.classList.toggle('open');
-            const isExpanded = navLinks.classList.contains('open');
+            navLinks.classList.toggle('active');
+            menuButton.classList.toggle('active');
+            const isExpanded = navLinks.classList.contains('active');
             menuButton.setAttribute('aria-expanded', isExpanded);
-            menuButton.innerHTML = isExpanded ? '✕' : '☰';
         }
-        
+        // click event added to menu button
         menuButton.addEventListener('click', toggleMenu);
         
         // Close menu when clicking on a link (for mobile)
         navLinks.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
-                if (navLinks.classList.contains('open')) {
+                if (navLinks.classList.contains('active')) {
                     toggleMenu();
                 }
             });
@@ -982,21 +1017,7 @@
             });
         }
         
-        // Audio Toggle
-        const audioToggle = document.getElementById('audio-toggle');
-        const backgroundAudio = document.getElementById('background-audio');
-        let isPlaying = false;
-        
-        audioToggle.addEventListener('click', function() {
-            if (isPlaying) {
-                backgroundAudio.pause();
-                audioToggle.innerHTML = '<i class="fas fa-music"></i>';
-            } else {
-                backgroundAudio.play();
-                audioToggle.innerHTML = '<i class="fas fa-pause"></i>';
-            }
-            isPlaying = !isPlaying;
-        });
+      
         
         // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
